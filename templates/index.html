@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡牌游戏</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>卡牌游戏</h1>
+        <div class="menu">
+            <button onclick="window.location.href='/prepare'" class="btn primary">开始游戏</button>
+            <button onclick="window.location.href='/deck'" class="btn secondary">卡牌配置</button>
+            <button onclick="window.location.href='/cards'" class="btn tertiary">卡牌展示</button>
+        </div>
+    </div>
+    
+    <div class="music-control" id="musicControl" onclick="toggleMusic()">
+        <i class="fas fa-music"></i>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 

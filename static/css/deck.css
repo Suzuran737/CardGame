@@ -1,0 +1,357 @@
+.deck-builder {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.available-cards, .current-deck {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.deck-slots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.deck-slot {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    width: 160px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+}
+
+.deck-slot:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.deck-slot.filled {
+    border-style: solid;
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.deck-slot.filled:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.deck-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* 卡牌样式 */
+.card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    width: 160px;
+    height: 240px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: 0.5s;
+}
+
+.card:hover::before {
+    transform: translateX(100%);
+}
+
+.card-header {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.card-name {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+    margin: 0;
+    height: 180px;
+    display: flex;
+    align-items: center;
+}
+
+.card-element {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0.2rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 元素颜色 */
+.element-风 { background: linear-gradient(45deg, #4CAF50, #45a049); }
+.element-火 { background: linear-gradient(45deg, #f44336, #d32f2f); }
+.element-水 { background: linear-gradient(45deg, #2196F3, #1976D2); }
+.element-光 { background: linear-gradient(45deg, #FFC107, #FFA000); }
+.element-暗 { background: linear-gradient(45deg, #9C27B0, #7B1FA2); }
+.element-土 { background: linear-gradient(45deg, #795548, #5D4037); }
+
+.card-stats {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.3rem;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.2rem 0.4rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.stat-label {
+    font-weight: bold;
+    font-size: 0.7rem;
+    margin-bottom: 0.2rem;
+}
+
+.card-skills {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+}
+
+.skill {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem;
+    border-radius: 5px;
+    margin-bottom: 0.2rem;
+}
+
+.skill-name {
+    font-weight: bold;
+    color: white;
+    font-size: 0.8rem;
+    margin-bottom: 0.1rem;
+}
+
+.skill-cost {
+    font-size: 0.6rem;
+    color: #FFC107;
+}
+
+/* 卡牌详情（悬停时显示） */
+.card-details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 1rem;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    font-size: 0.8rem;
+}
+
+.card:hover .card-details {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.detail-stat {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+    color: white;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #FFC107;
+}
+
+/* 卡牌拖拽样式 */
+.card.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+}
+
+.deck-slot.drag-over {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: var(--primary-color);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .deck-builder {
+        grid-template-columns: 1fr;
+    }
+    
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .deck-slots {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .card {
+        width: 140px;
+        height: 210px;
+    }
+    
+    .card-name {
+        font-size: 1rem;
+        height: 150px;
+    }
+}
+
+/* 卡牌状态样式 */
+.card.in-deck {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(50%);
+}
+
+.card.in-deck:hover {
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* 已保存的牌组样式 */
+.saved-decks {
+    margin-top: 2rem;
+}
+
+.deck-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.deck-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.deck-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.deck-item .deck-name {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.deck-item .deck-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.deck-item .card {
+    transform: scale(0.8);
+    transform-origin: top center;
+}
+
+/* 消息提示样式 */
+.message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 1000;
+    animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+.message.success {
+    background: rgba(76, 175, 80, 0.8);
+}
+
+.message.warning {
+    background: rgba(255, 152, 0, 0.8);
+}
+
+.message.error {
+    background: rgba(244, 67, 54, 0.8);
+} 

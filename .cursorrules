@@ -1,0 +1,24 @@
+# Instructions for building a card game using HTML, CSS, and JavaScript with a Python and Flask backend.
+
+# Frontend Development Guidelines:
+- Use semantic HTML to structure the card game elements clearly.
+- Apply modular CSS design; consider using BEM (Block Element Modifier) methodology to ensure components are reusable and styles are maintainable.
+- Write clean, modular JavaScript. Organize functions and logic related to game mechanics in separate modules/files for readability and reusability.
+- Keep JavaScript functions pure and avoid unnecessary side effects. Use ES6+ features such as arrow functions and let/const for variable declaration.
+- Ensure that the game state is managed in a way that allows easy updates and extensions, such as dynamic card addition or modification.
+
+# Backend Development Guidelines:
+- Follow Flask application factory pattern for scalability. Organize routes, views, and models in separate modules.
+- Use Flask-SQLAlchemy for database interactions if persistent data storage is needed for game states or user progress.
+- Ensure clear separation of concerns between business logic and route handling in Flask applications.
+- Implement proper error handling and validation using Flask's custom error handlers.
+- For adding new card functionalities or rules, structure Flask endpoints to dynamically fetch and store card attributes and actions.
+
+# Game Extension and Scalability:
+- Design card data (attributes and actions) as JSON objects or database entries that can easily be fetched and rendered in front-end.
+- Create a generic card template that can be instantiated via JavaScript when adding new cards, ensuring minimal disruption to existing code.
+- Employ OOP principles, such as composition over inheritance, to build card classes that are easily extendable with new abilities or rules.
+
+# Best Practices:
+- Use comments and JSDoc to document functions and modules clearly, providing explanations of complex game mechanics or unique code sections.
+- Regularly test game functions and logic using JavaScript testing frameworks (e.g., Jest) to ensure robust functionality and avoid regressions.

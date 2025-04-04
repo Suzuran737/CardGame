@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>准备战斗 - 卡牌游戏</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/prepare.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>准备战斗</h1>
+        <div class="navigation">
+            <button onclick="window.location.href='/'" class="btn secondary">返回首页</button>
+        </div>
+        
+        <div class="prepare-content">
+            <div class="deck-selection">
+                <div class="deck-options">
+                    <div class="my-decks">
+                        <button class="btn primary" id="myDecksBtn">我的牌组</button>
+                        <div class="deck-dropdown" id="deckDropdown">
+                            <!-- 已保存的牌组将通过JavaScript加载 -->
+                        </div>
+                    </div>
+                    
+                    <div class="quick-select">
+                        <h2>快速选择</h2>
+                        <div class="cards-grid" id="quickSelectCards">
+                            <!-- 快速选择卡牌将通过JavaScript加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="battle-info">
+                <h2>已选卡牌</h2>
+                <div class="deck-slots" id="selectedCards">
+                    <div class="deck-slot" data-slot="1"></div>
+                    <div class="deck-slot" data-slot="2"></div>
+                    <div class="deck-slot" data-slot="3"></div>
+                </div>
+                <div class="battle-actions">
+                    <button class="btn primary" id="startBattleBtn" disabled>开始战斗</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/prepare.js') }}"></script>
+</body>
+</html> 
