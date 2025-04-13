@@ -4,13 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>卡牌配置 - 卡牌游戏</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/card_icon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/deck.css') }}">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>卡牌配置</h1>
-        <div class="navigation">
+        <div class="header">
+            <h1>卡牌配置</h1>
             <button onclick="window.location.href='/'" class="btn secondary">返回首页</button>
         </div>
         

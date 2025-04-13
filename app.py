@@ -43,6 +43,16 @@ def save_decks(decks):
         print(f"保存牌组失败: {str(e)}")
         return False
 
+# 保存卡牌数据
+def save_cards(cards):
+    try:
+        with open('data/cards.json', 'w', encoding='utf-8') as f:
+            json.dump(cards, f, ensure_ascii=False, indent=4)
+        return True
+    except Exception as e:
+        print(f"保存卡牌失败: {str(e)}")
+        return False
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -63,12 +73,34 @@ def prepare():
 def battle():
     return render_template('battle.html')
 
-@app.route('/api/cards')
-def get_cards():
-    try:
-        return jsonify(load_cards())
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+@app.route('/api/cards', methods=['GET', 'POST'])
+def handle_cards():
+    if request.method == 'GET':
+        try:
+            return jsonify(load_cards())
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    elif request.method == 'POST':
+        try:
+            card_data = request.json
+            if not card_data:
+                return jsonify({"error": "无效的卡牌数据"}), 400
+                
+            cards = load_cards()
+            
+            # 生成新的ID
+            new_id = max([card.get('id', 0) for card in cards['cards']], default=0) + 1
+            card_data['id'] = new_id
+            
+            # 添加新卡牌
+            cards['cards'].append(card_data)
+            
+            if save_cards(cards):
+                return jsonify({"success": True, "id": new_id})
+            else:
+                return jsonify({"error": "保存卡牌失败"}), 500
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
 @app.route('/api/decks', methods=['GET'])
 def get_decks():
@@ -97,6 +129,49 @@ def save_deck():
             return jsonify({"success": True})
         else:
             return jsonify({"error": "保存牌组失败"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/cards/<int:card_id>', methods=['DELETE'])
+def delete_card(card_id):
+    try:
+        cards = load_cards()
+        # 查找要删除的卡牌
+        card_index = next((i for i, card in enumerate(cards['cards']) if card['id'] == card_id), -1)
+        if card_index == -1:
+            return jsonify({"error": "卡牌不存在"}), 404
+            
+        # 删除卡牌
+        cards['cards'].pop(card_index)
+        
+        if save_cards(cards):
+            return jsonify({"success": True})
+        else:
+            return jsonify({"error": "保存卡牌失败"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/cards/<int:card_id>', methods=['PUT'])
+def update_card(card_id):
+    try:
+        card_data = request.json
+        if not card_data:
+            return jsonify({"error": "无效的卡牌数据"}), 400
+            
+        cards = load_cards()
+        
+        # 查找要更新的卡牌
+        card_index = next((i for i, card in enumerate(cards['cards']) if card['id'] == card_id), -1)
+        if card_index == -1:
+            return jsonify({"error": "卡牌不存在"}), 404
+            
+        # 更新卡牌数据
+        cards['cards'][card_index] = card_data
+        
+        if save_cards(cards):
+            return jsonify({"success": True})
+        else:
+            return jsonify({"error": "保存卡牌失败"}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

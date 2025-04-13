@@ -3,36 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='images/card_icon.ico') }}" type="image/x-icon">
     <title>战斗 - 卡牌游戏</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/battle.css') }}">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="battle-header">
-            <h1>战斗</h1>
-            <div class="battle-controls">
-                <button class="btn secondary" onclick="endBattle()">结束战斗</button>
-            </div>
-        </div>
-        
+    <div class="battle-container">
+        <!-- 主战斗区域 -->
         <div class="battle-field">
             <!-- 敌方卡牌区域 -->
             <div class="enemy-field">
-                <h2>敌方</h2>
                 <div class="cards-row" id="enemyCards">
                     <!-- 敌方卡牌将通过JavaScript加载 -->
                 </div>
             </div>
             
-            <!-- 战斗日志区域 -->
-            <div class="battle-log" id="battleLog">
-                <!-- 战斗日志将通过JavaScript动态添加 -->
-            </div>
-            
             <!-- 我方卡牌区域 -->
             <div class="player-field">
-                <h2>我方</h2>
                 <div class="cards-row" id="playerCards">
                     <!-- 我方卡牌将通过JavaScript加载 -->
                 </div>
@@ -48,9 +45,16 @@
                 <!-- 行动选项将通过JavaScript动态生成 -->
             </div>
         </div>
+        
+        <!-- 战斗日志区域 -->
+        <div class="battle-log" id="battleLog">
+            <h3>战斗日志</h3>
+            <!-- 战斗日志将通过JavaScript动态添加 -->
+        </div>
     </div>
     
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/battle.js') }}"></script>
+    <!-- 使用模块化脚本 -->
+    <script src="{{ url_for('static', filename='js/main.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename='js/battle.js') }}" type="module"></script>
 </body>
 </html> 

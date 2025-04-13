@@ -1,19 +1,35 @@
-.battle-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+.battle-container {
+    width: 1920px;
+    height: 1080px;
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    grid-template-columns: 4fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .battle-field {
+    position: relative;
+    grid-row: 1;
+    grid-column: 1 / span 2;
     display: grid;
-    grid-template-rows: 1fr auto 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 2rem;
-    min-height: 600px;
     background: #f8f8f8;
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    height: 520px;
+}
+
+.end-battle-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
 }
 
 .enemy-field, .player-field {
@@ -28,12 +44,21 @@
 }
 
 .battle-log {
+    grid-row: 2;
+    grid-column: 2;
     background: white;
     padding: 1rem;
-    border-radius: 5px;
-    max-height: 200px;
+    border-radius: 10px;
+    height: auto;
     overflow-y: auto;
     font-family: monospace;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.battle-log h3 {
+    margin-top: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
 }
 
 .log-entry {
@@ -46,12 +71,37 @@
     border-bottom: none;
 }
 
+/* 日志文本颜色 */
+.log-entry .player-card {
+    color: #27ae60; /* 绿色，玩家卡牌 */
+    font-weight: bold;
+}
+
+.log-entry .enemy-card {
+    color: #e74c3c; /* 红色，敌方卡牌 */
+    font-weight: bold;
+}
+
 .action-panel {
-    margin-top: 2rem;
+    grid-row: 2;
+    grid-column: 1;
     background: white;
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    height: 240px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.action-message {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #555;
 }
 
 .current-turn {
@@ -63,28 +113,114 @@
 
 .action-options {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     gap: 1rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: #f8f8f8;
+    border-radius: 5px;
+}
+
+.card-info .card-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.card-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+.card-actions button {
+    position: relative;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    text-align: center;
+    transition: all 0.3s;
+    flex: 1;
+    min-width: 120px;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-actions button.primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.card-actions button.secondary {
+    background-color: #f39c12;
+    color: white;
+}
+
+.card-actions button.cancel {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.card-actions button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.skill-description {
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+
+/* 卡牌样式 */
+.card {
+    width: 150px;
+    height: 230px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s;
 }
 
 /* 卡牌状态样式 */
-.card {
-    position: relative;
-}
-
 .card.dead {
     opacity: 0.5;
     filter: grayscale(100%);
+    border: 2px solid #7f8c8d;
 }
 
 .card.selected {
     transform: translateY(-10px);
-    box-shadow: 0 0 15px var(--primary-color);
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.8);
+    border: 2px solid #3498db;
+}
+
+.card.selectable {
+    cursor: pointer;
+}
+
+.card.selectable:hover {
+    transform: translateY(-5px);
 }
 
 .card.targetable {
     cursor: pointer;
-    transition: transform 0.2s;
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.8);
+    border: 2px solid #e74c3c;
 }
 
 .card.targetable:hover {
@@ -92,10 +228,16 @@
 }
 
 /* 状态效果图标 */
-.status-effect {
+.status-effects {
     position: absolute;
     top: 5px;
     right: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+
+.status-effect {
     width: 20px;
     height: 20px;
     background: rgba(0,0,0,0.7);
@@ -105,16 +247,156 @@
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
+    cursor: help;
+}
+
+/* 根据效果类型显示不同颜色 */
+.status-effect[title*="防御增强"], .status-effect[title*="闪避增强"], .status-effect[title*="伤害反弹"] {
+    background: rgba(46, 204, 113, 0.8);  /* 绿色 - 增益效果 */
+}
+
+.status-effect[title*="速度降低"], .status-effect[title*="混乱"], .status-effect[title*="灼烧"] {
+    background: rgba(231, 76, 60, 0.8);  /* 红色 - 减益效果 */
+}
+
+.status-effect[title*="中毒"] {
+    background: rgba(142, 68, 173, 0.8);  /* 紫色 - 中毒效果 */
+}
+
+.status-effect[title*="能量增益"] {
+    background: rgba(52, 152, 219, 0.8);  /* 蓝色 - 能量效果 */
+}
+
+/* 卡牌属性被增强或减弱时的样式 */
+.stat-modified {
+    font-weight: bold;
+}
+
+/* 根据效果类型自动应用不同颜色 */
+.card[data-side="player"] .stat-modified {
+    color: #27ae60; /* 绿色，表示增强 */
+}
+
+.card[data-side="enemy"] .stat-modified {
+    color: #e74c3c; /* 红色，表示减弱 */
+}
+
+/* 或者可以判断实际值与基础值的大小关系 */
+span.stat-modified[class*="buff"] {
+    color: #27ae60; /* 绿色，表示增强 */
+}
+
+span.stat-modified[class*="debuff"] {
+    color: #e74c3c; /* 红色，表示减弱 */
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
-    .cards-row {
-        flex-direction: column;
-        align-items: center;
+@media (max-width: 1920px) {
+    .battle-container {
+        width: 100%;
+        height: 100vh;
+    }
+}
+
+@media (max-width: 1600px) {
+    .card {
+        width: 140px;
+        height: 220px;
+        padding: 0.7rem;
+    }
+}
+
+@media (max-width: 1280px) {
+    .battle-container {
+        grid-template-rows: 2fr 1fr 1fr;
+        grid-template-columns: 1fr;
     }
     
-    .action-options {
-        flex-direction: column;
+    .battle-field {
+        grid-row: 1;
+        grid-column: 1;
     }
+    
+    .action-panel {
+        grid-row: 2;
+        grid-column: 1;
+        height: 250px;
+    }
+    
+    .battle-log {
+        grid-row: 3;
+        grid-column: 1;
+    }
+}
+
+/* 战斗结果弹窗 */
+.battle-result-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.battle-result-container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 90%;
+}
+
+.victory-title {
+    color: #27ae60;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.defeat-title {
+    color: #e74c3c;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.battle-result-container p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #555;
+}
+
+.battle-result-container button {
+    margin: 0 10px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+}
+
+.card.acted {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+    filter: sepia(0.3) saturate(0.8);
+    border: 2px solid #95a5a6;
+}
+
+.card.acted::after {
+    content: "已行动";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 1;
 } 

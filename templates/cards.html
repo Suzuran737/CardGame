@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>卡牌展示 - 卡牌游戏</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/card_icon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
 </head>
@@ -12,9 +13,215 @@
         <h1>卡牌展示</h1>
         <div class="navigation">
             <button onclick="window.location.href='/'" class="btn secondary">返回首页</button>
+            <div class="edit-dropdown">
+                <button class="btn primary" id="editBtn">编辑卡牌</button>
+                <div class="dropdown-content">
+                    <button class="dropdown-item" id="addCardBtn">添加卡牌</button>
+                    <button class="dropdown-item" id="deleteCardBtn">删除卡牌</button>
+                    <button class="dropdown-item" id="editCardBtn">修改卡牌</button>
+                    <button class="dropdown-item" id="searchCardBtn">查找卡牌</button>
+                </div>
+            </div>
         </div>
         <div class="cards-container" id="cardsContainer">
             <!-- 卡牌将通过JavaScript动态加载 -->
+        </div>
+    </div>
+    <!-- 卡牌编辑模态框 -->
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">编辑卡牌</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="cardForm">
+                <div class="form-group">
+                    <label for="cardName">卡牌名称 <span class="tooltip-icon" data-tooltip="卡牌名称不能超过8个字符">?</span></label>
+                    <input type="text" id="cardName" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardElement">元素类型 <span class="tooltip-icon" data-tooltip="选择卡牌的元素属性，影响技能效果">?</span></label>
+                    <select id="cardElement" required>
+                        <option value="风">风</option>
+                        <option value="火">火</option>
+                        <option value="水">水</option>
+                        <option value="光">光</option>
+                        <option value="暗">暗</option>
+                        <option value="土">土</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>属性值 <span class="tooltip-icon" data-tooltip="设置卡牌的基础属性">?</span></label>
+                    <div class="stats-grid">
+                        <div class="stat-input">
+                            <label for="hp">生命值 <span class="tooltip-icon" data-tooltip="卡牌的生命值，范围1-30">?</span></label>
+                            <input type="number" id="hp" min="0" required>
+                        </div>
+                        <div class="stat-input">
+                            <label for="atk">攻击力 <span class="tooltip-icon" data-tooltip="卡牌的攻击力，范围0-15">?</span></label>
+                            <input type="number" id="atk" min="0" required>
+                        </div>
+                        <div class="stat-input">
+                            <label for="spd">速度 <span class="tooltip-icon" data-tooltip="卡牌的速度，范围1-15，影响行动顺序">?</span></label>
+                            <input type="number" id="spd" min="0" required>
+                        </div>
+                        <div class="stat-input">
+                            <label for="def">防御力 <span class="tooltip-icon" data-tooltip="卡牌的防御力，范围0-10，减少受到的伤害">?</span></label>
+                            <input type="number" id="def" min="0" required>
+                        </div>
+                        <div class="stat-input">
+                            <label for="cri">暴击率 <span class="tooltip-icon" data-tooltip="卡牌的暴击率，范围0-100，影响暴击概率">?</span></label>
+                            <input type="number" id="cri" min="0" max="100" required>
+                        </div>
+                        <div class="stat-input">
+                            <label for="nrg">初始能量 <span class="tooltip-icon" data-tooltip="卡牌的初始能量，范围0-5，用于释放技能">?</span></label>
+                            <input type="number" id="nrg" min="0" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>技能 <span class="tooltip-icon" data-tooltip="每个卡牌最多可以拥有3个技能">?</span></label>
+                    <div id="skillsContainer">
+                        <div class="skill-input">
+                            <input type="text" placeholder="技能名称" class="skill-name" required>
+                            <input type="number" placeholder="消耗能量" class="skill-cost" min="0" required>
+                            <textarea placeholder="技能描述" class="skill-description" required></textarea>
+                            
+                            <div class="skill-effect">
+                                <div class="effect-group">
+                                    <label>伤害倍率 <span class="tooltip-icon" data-tooltip="技能的基础伤害倍率，必须大于0">?</span></label>
+                                    <input type="number" class="effect-damage" min="0" step="0.1" placeholder="例如：1.8">
+                                </div>
+                                
+                                <div class="effect-group">
+                                    <label>效果类型 <span class="tooltip-icon" data-tooltip="选择技能的效果类型">?</span></label>
+                                    <select class="effect-type">
+                                        <option value="">选择效果类型</option>
+                                        <option value="damage">伤害</option>
+                                        <option value="heal">治疗</option>
+                                        <option value="buff">增益</option>
+                                        <option value="debuff">减益</option>
+                                    </select>
+                                </div>
+
+                                <div class="effect-details" style="display: none;">
+                                    <!-- 伤害效果 -->
+                                    <div class="effect-damage-options">
+                                        <div class="effect-group">
+                                            <label>是否AOE <span class="tooltip-icon" data-tooltip="是否对全体目标造成伤害">?</span></label>
+                                            <input type="checkbox" class="effect-aoe">
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>暴击率加成 <span class="tooltip-icon" data-tooltip="额外增加的暴击率，范围0-100">?</span></label>
+                                            <input type="number" class="effect-crit-rate" min="0" max="100" placeholder="0-100">
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>无视防御 <span class="tooltip-icon" data-tooltip="无视目标防御力的百分比，范围0-100">?</span></label>
+                                            <input type="number" class="effect-ignore-def" min="0" max="100" placeholder="0-100">
+                                        </div>
+                                    </div>
+
+                                    <!-- 治疗效果 -->
+                                    <div class="effect-heal-options">
+                                        <div class="effect-group">
+                                            <label>治疗量 <span class="tooltip-icon" data-tooltip="技能的治疗量，必须大于0">?</span></label>
+                                            <input type="number" class="effect-heal" min="0" step="0.1" placeholder="例如：5">
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>是否AOE <span class="tooltip-icon" data-tooltip="是否对全体目标进行治疗">?</span></label>
+                                            <input type="checkbox" class="effect-heal-aoe">
+                                        </div>
+                                    </div>
+
+                                    <!-- 增益效果 -->
+                                    <div class="effect-buff-options">
+                                        <div class="effect-group">
+                                            <label>增益类型 <span class="tooltip-icon" data-tooltip="选择要提升的属性">?</span></label>
+                                            <select class="buff-type">
+                                                <option value="defense">防御力</option>
+                                                <option value="dodge_rate">闪避率</option>
+                                                <option value="energy">能量</option>
+                                                <option value="reflect_damage">伤害反弹</option>
+                                            </select>
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>增益值 <span class="tooltip-icon" data-tooltip="增益效果的数值">?</span></label>
+                                            <input type="number" class="buff-value" placeholder="数值">
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>持续回合 <span class="tooltip-icon" data-tooltip="增益效果持续的回合数">?</span></label>
+                                            <input type="number" class="buff-duration" min="1" placeholder="回合数">
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>是否AOE <span class="tooltip-icon" data-tooltip="是否对全体目标施加增益">?</span></label>
+                                            <input type="checkbox" class="buff-aoe">
+                                        </div>
+                                    </div>
+
+                                    <!-- 减益效果 -->
+                                    <div class="effect-debuff-options">
+                                        <div class="effect-group">
+                                            <label>减益类型 <span class="tooltip-icon" data-tooltip="选择要降低的属性">?</span></label>
+                                            <select class="debuff-type">
+                                                <option value="speed">速度</option>
+                                                <option value="damage">持续伤害</option>
+                                                <option value="confusion">混乱</option>
+                                            </select>
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>减益值 <span class="tooltip-icon" data-tooltip="减益效果的数值">?</span></label>
+                                            <input type="number" class="debuff-value" placeholder="数值">
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>持续回合 <span class="tooltip-icon" data-tooltip="减益效果持续的回合数">?</span></label>
+                                            <input type="number" class="debuff-duration" min="1" placeholder="回合数">
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>触发概率 <span class="tooltip-icon" data-tooltip="减益效果触发的概率，范围0-100">?</span></label>
+                                            <input type="number" class="debuff-probability" min="0" max="100" placeholder="0-100">
+                                        </div>
+                                        <div class="effect-group">
+                                            <label>是否AOE <span class="tooltip-icon" data-tooltip="是否对全体目标施加减益">?</span></label>
+                                            <input type="checkbox" class="debuff-aoe">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn danger remove-skill">删除技能</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn secondary" id="addSkillBtn">添加技能</button>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn primary">保存</button>
+                    <button type="button" class="btn secondary" id="cancelBtn">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 确认删除模态框 -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h2>确认删除</h2>
+            <p>确定要删除这张卡牌吗？此操作不可撤销。</p>
+            <div class="form-actions">
+                <button class="btn danger" id="confirmDeleteBtn">确认删除</button>
+                <button class="btn secondary" id="cancelDeleteBtn">取消</button>
+            </div>
+        </div>
+    </div>
+    <!-- 搜索模态框 -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>查找卡牌</h2>
+            <div class="form-group">
+                <input type="text" id="searchInput" placeholder="输入卡牌名称">
+            </div>
+            <div class="form-actions">
+                <button class="btn primary" id="searchBtn">搜索</button>
+                <button class="btn secondary" id="cancelSearchBtn">取消</button>
+            </div>
         </div>
     </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>

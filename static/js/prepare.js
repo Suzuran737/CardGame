@@ -94,28 +94,57 @@ function updateQuickSelect(cards) {
     });
 }
 
+// 根据ID获取卡牌数据
+function getCardById(cardId) {
+    const cards = document.querySelectorAll('.card');
+    for (const card of cards) {
+        if (card.dataset.id === cardId) {
+            return {
+                id: card.dataset.id,
+                name: card.querySelector('.card-name').textContent,
+                element: card.querySelector('.card-element').textContent,
+                stats: {
+                    HP: parseInt(card.querySelector('.stat:nth-child(1) span:last-child').textContent),
+                    ATK: parseInt(card.querySelector('.stat:nth-child(2) span:last-child').textContent),
+                    SPD: parseInt(card.querySelector('.stat:nth-child(3) span:last-child').textContent),
+                    DEF: parseInt(card.dataset.def || 0),
+                    CRI: parseInt(card.dataset.cri || 0),
+                    NRG: parseInt(card.dataset.nrg || 0)
+                },
+                skills: JSON.parse(card.dataset.skills || '[]')
+            };
+        }
+    }
+    return null;
+}
+
 // 创建卡牌元素
 function createCardElement(card) {
     const element = document.createElement('div');
     element.className = `card ${selectedCards.has(card.id) ? 'selected' : ''}`;
     element.dataset.id = card.id;
+    element.dataset.def = card.stats.DEF;
+    element.dataset.cri = card.stats.CRI;
+    element.dataset.nrg = card.stats.NRG;
+    element.dataset.skills = JSON.stringify(card.skills || []);
+    
     element.innerHTML = `
         <div class="card-header">
             <div class="card-name">${card.name}</div>
         </div>
-        <div class="card-element element-${card.element.toLowerCase()}">${card.element}</div>
+        <div class="card-element element-${card.element}">${card.element}</div>
         <div class="card-stats">
             <div class="stat">
                 <span class="stat-label">HP</span>
-                <span>${card.hp}</span>
+                <span>${card.stats.HP}</span>
             </div>
             <div class="stat">
                 <span class="stat-label">ATK</span>
-                <span>${card.atk}</span>
+                <span>${card.stats.ATK}</span>
             </div>
             <div class="stat">
                 <span class="stat-label">SPD</span>
-                <span>${card.spd}</span>
+                <span>${card.stats.SPD}</span>
             </div>
         </div>
     `;
@@ -123,27 +152,46 @@ function createCardElement(card) {
     // 创建提示框
     const tooltip = document.createElement('div');
     tooltip.className = 'card-tooltip';
+    tooltip.dataset.cardId = card.id;
     tooltip.innerHTML = `
         <div class="tooltip-header">
             <div class="tooltip-name">${card.name}</div>
-            <div class="tooltip-element element-${card.element.toLowerCase()}">${card.element}</div>
+            <div class="tooltip-element element-${card.element}">${card.element}</div>
         </div>
         <div class="tooltip-stats">
             <div class="tooltip-stat">
                 <span class="stat-label">生命值</span>
-                <span class="stat-value">${card.hp}</span>
+                <span class="stat-value">${card.stats.HP}</span>
             </div>
             <div class="tooltip-stat">
                 <span class="stat-label">攻击力</span>
-                <span class="stat-value">${card.atk}</span>
+                <span class="stat-value">${card.stats.ATK}</span>
             </div>
             <div class="tooltip-stat">
                 <span class="stat-label">速度</span>
-                <span class="stat-value">${card.spd}</span>
+                <span class="stat-value">${card.stats.SPD}</span>
+            </div>
+            <div class="tooltip-stat">
+                <span class="stat-label">防御力</span>
+                <span class="stat-value">${card.stats.DEF}</span>
+            </div>
+            <div class="tooltip-stat">
+                <span class="stat-label">暴击率</span>
+                <span class="stat-value">${card.stats.CRI}%</span>
+            </div>
+            <div class="tooltip-stat">
+                <span class="stat-label">初始能量</span>
+                <span class="stat-value">${card.stats.NRG}</span>
             </div>
         </div>
-        <div class="tooltip-description">
-            ${card.description || '暂无描述'}
+        <div class="tooltip-skills">
+            ${card.skills ? card.skills.map(skill => `
+                <div class="tooltip-skill">
+                    <div class="skill-name">${skill.name}</div>
+                    <div class="skill-cost">消耗: ${skill.cost} NRG</div>
+                    <div class="skill-description">${skill.description}</div>
+                </div>
+            `).join('') : ''}
         </div>
     `;
 
@@ -151,20 +199,31 @@ function createCardElement(card) {
     document.body.appendChild(tooltip);
 
     // 添加鼠标悬停事件
+    let tooltipTimeout;
     element.addEventListener('mouseenter', (e) => {
+        clearTimeout(tooltipTimeout);
         const rect = element.getBoundingClientRect();
-        tooltip.style.left = `${rect.right + 10}px`;
-        tooltip.style.top = `${rect.top}px`;
-        tooltip.style.display = 'block';
+        const tooltip = document.querySelector(`.card-tooltip[data-card-id="${card.id}"]`);
+        if (tooltip) {
+            tooltip.style.left = `${rect.right + 10}px`;
+            tooltip.style.top = `${rect.top}px`;
+            tooltip.style.display = 'block';
+        }
     });
 
     element.addEventListener('mouseleave', () => {
-        tooltip.style.display = 'none';
+        const tooltip = document.querySelector(`.card-tooltip[data-card-id="${card.id}"]`);
+        if (tooltip) {
+            tooltipTimeout = setTimeout(() => {
+                tooltip.style.display = 'none';
+            }, 100);
+        }
     });
 
     // 添加窗口滚动事件，确保提示框位置正确
     window.addEventListener('scroll', () => {
-        if (tooltip.style.display === 'block') {
+        const tooltip = document.querySelector(`.card-tooltip[data-card-id="${card.id}"]`);
+        if (tooltip && tooltip.style.display === 'block') {
             const rect = element.getBoundingClientRect();
             tooltip.style.left = `${rect.right + 10}px`;
             tooltip.style.top = `${rect.top}px`;
@@ -202,6 +261,12 @@ function toggleCardSelection(card) {
             
             // 为已选卡牌添加点击事件以取消选择
             cardElement.addEventListener('click', () => {
+                // 移除对应的悬浮框
+                const tooltip = document.querySelector(`.card-tooltip[data-card-id="${card.id}"]`);
+                if (tooltip) {
+                    tooltip.remove();
+                }
+                
                 emptySlot.innerHTML = '';
                 emptySlot.classList.remove('filled');
                 selectedCards.delete(card.id);
@@ -228,6 +293,10 @@ async function selectDeck(deck) {
             slot.classList.remove('filled');
         });
 
+        // 移除所有现有的悬浮框
+        const existingTooltips = document.querySelectorAll('.card-tooltip');
+        existingTooltips.forEach(tooltip => tooltip.remove());
+
         // 加载牌组中的卡牌
         const response = await fetch('/api/cards');
         if (!response.ok) throw new Error('加载卡牌失败');
@@ -247,6 +316,12 @@ async function selectDeck(deck) {
                 
                 // 为已选卡牌添加点击事件以取消选择
                 cardElement.addEventListener('click', () => {
+                    // 移除对应的悬浮框
+                    const tooltip = document.querySelector(`.card-tooltip[data-card-id="${card.id}"]`);
+                    if (tooltip) {
+                        tooltip.remove();
+                    }
+                    
                     slot.innerHTML = '';
                     slot.classList.remove('filled');
                     selectedCards.delete(card.id);
@@ -292,28 +367,34 @@ function startBattle() {
     }
     
     // 保存选择的卡牌到本地存储
-    localStorage.setItem('selectedCards', JSON.stringify([...selectedCards.keys()]));
-    window.location.href = '/battle';
-}
-
-// 根据ID获取卡牌数据
-function getCardById(cardId) {
-    const cards = document.querySelectorAll('.card');
-    for (const card of cards) {
-        if (card.dataset.id === cardId) {
-            return {
-                id: card.dataset.id,
-                name: card.querySelector('.card-name').textContent,
-                element: card.querySelector('.card-element').textContent,
-                stats: {
-                    HP: parseInt(card.querySelector('.stat:nth-child(1) span:last-child').textContent),
-                    ATK: parseInt(card.querySelector('.stat:nth-child(2) span:last-child').textContent),
-                    SPD: parseInt(card.querySelector('.stat:nth-child(3) span:last-child').textContent)
-                }
-            };
+    const battleDeck = [];
+    selectedCards.forEach((slotIndex, cardId) => {
+        // 从快速选择区域或已选卡牌区域获取卡牌数据
+        const cardElement = document.querySelector(`.card[data-id="${cardId}"]`);
+        if (cardElement) {
+            battleDeck.push({
+                id: cardId,
+                name: cardElement.querySelector('.card-name').textContent,
+                element: cardElement.querySelector('.card-element').textContent,
+                hp: parseInt(cardElement.querySelector('.stat:nth-child(1) span:last-child').textContent),
+                atk: parseInt(cardElement.querySelector('.stat:nth-child(2) span:last-child').textContent),
+                spd: parseInt(cardElement.querySelector('.stat:nth-child(3) span:last-child').textContent),
+                def: parseInt(cardElement.dataset.def || 0),
+                cri: parseInt(cardElement.dataset.cri || 0),
+                nrg: parseInt(cardElement.dataset.nrg || 0),
+                skills: JSON.parse(cardElement.dataset.skills || '[]'),
+                description: cardElement.dataset.description || ''
+            });
         }
+    });
+
+    if (battleDeck.length !== MAX_SELECTED_CARDS) {
+        showMessage('卡牌数据错误，请重新选择卡牌', 'error');
+        return;
     }
-    return null;
+    
+    localStorage.setItem('battleDeck', JSON.stringify(battleDeck));
+    window.location.href = '/battle';
 }
 
 // 创建牌组项
@@ -366,42 +447,4 @@ function updateSelectedCardsDisplay() {
             
             startBattleBtn.disabled = selectedCards.length !== MAX_SELECTED_CARDS;
         });
-}
-
-// 创建卡牌元素
-function createCardElement(cardData) {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.dataset.id = cardData.id;
-    
-    card.innerHTML = `
-        <div class="card-header">
-            <div class="card-name">${cardData.name}</div>
-        </div>
-        <div class="card-element element-${cardData.element}">${cardData.element}</div>
-        <div class="card-stats">
-            <div class="stat">
-                <span class="stat-label">HP</span>
-                <span>${cardData.stats.HP}</span>
-            </div>
-            <div class="stat">
-                <span class="stat-label">ATK</span>
-                <span>${cardData.stats.ATK}</span>
-            </div>
-            <div class="stat">
-                <span class="stat-label">SPD</span>
-                <span>${cardData.stats.SPD}</span>
-            </div>
-        </div>
-        <div class="card-skills">
-            ${cardData.skills.map(skill => `
-                <div class="skill">
-                    <div class="skill-name">${skill.name}</div>
-                    <div class="skill-cost">${skill.cost} NRG</div>
-                </div>
-            `).join('')}
-        </div>
-    `;
-    
-    return card;
 } 

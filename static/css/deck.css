@@ -1,8 +1,9 @@
 .deck-builder {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 3fr 1fr;
     gap: 2rem;
     margin-top: 2rem;
+    height: calc(100vh - 100px);
 }
 
 .available-cards, .current-deck {
@@ -13,11 +14,20 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+.available-cards {
+    overflow-y: auto;
+    height: 100%;
+}
+
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1.5rem;
     margin-top: 1rem;
+}
+
+.current-deck {
+    min-width: 640px;
 }
 
 .deck-slots {
@@ -32,8 +42,8 @@
     background: rgba(255, 255, 255, 0.05);
     border: 2px dashed rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    width: 160px;
-    height: 240px;
+    width: 180px;
+    height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -62,6 +72,37 @@
     gap: 1rem;
     justify-content: center;
     margin-top: 1.5rem;
+}
+
+/* 自定义滚动条样式 */
+.available-cards::-webkit-scrollbar {
+    width: 8px;
+}
+
+.available-cards::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.available-cards::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.available-cards::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* 标题和按钮布局 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.header h1 {
+    margin: 0;
 }
 
 /* 卡牌样式 */
@@ -354,4 +395,98 @@
 
 .message.error {
     background: rgba(244, 67, 54, 0.8);
+}
+
+/* 卡牌详细信息提示框样式 */
+.card-tooltip {
+    position: fixed;
+    width: 250px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 8px;
+    padding: 15px;
+    color: #fff;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+    display: none;
+}
+
+.tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.tooltip-element {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tooltip-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.tooltip-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.tooltip-stat .stat-label {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 4px;
+}
+
+.tooltip-stat .stat-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.tooltip-skills {
+    margin-top: 10px;
+}
+
+.tooltip-skill {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.skill-name {
+    font-weight: bold;
+    color: #FFC107;
+    margin-bottom: 4px;
+}
+
+.skill-cost {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 4px;
+}
+
+.skill-description {
+    font-size: 12px;
+    color: #ddd;
+    line-height: 1.4;
 } 

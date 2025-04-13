@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>卡牌游戏</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/card_icon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>卡牌游戏</h1>
+        <h1>Card Game</h1>
         <div class="menu">
             <button onclick="window.location.href='/prepare'" class="btn primary">开始游戏</button>
-            <button onclick="window.location.href='/deck'" class="btn secondary">卡牌配置</button>
+            <button onclick="window.location.href='/deck'" class="btn secondary">卡组配置</button>
             <button onclick="window.location.href='/cards'" class="btn tertiary">卡牌展示</button>
         </div>
     </div>
