@@ -1,0 +1,21 @@
+{
+  "summary": {
+    "total_files": 11,
+    "javascript_files": 10,
+    "python_files": 1
+  },
+  "javascript": {
+    "lines": 81.97,
+    "statements": 80.68,
+    "functions": 84.86,
+    "branches": 66.88
+  },
+  "python": {
+    "lines": 75.86,
+    "branches": 0.0
+  },
+  "combined": {
+    "lines": 81.41454545454546,
+    "branches": 60.8
+  }
+}

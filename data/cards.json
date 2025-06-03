@@ -1,45 +1,6 @@
 {
     "cards": [
         {
-            "id": 1,
-            "name": "疾风刺客",
-            "element": "风",
-            "stats": {
-                "ATK": 10,
-                "HP": 18,
-                "DEF": 2,
-                "SPD": 15,
-                "CRI": 25,
-                "NRG": 1
-            },
-            "skills": [
-                {
-                    "name": "影袭",
-                    "cost": 2,
-                    "description": "对目标造成 ATK×1.5 伤害，自身闪避率+15% 持续2回合",
-                    "effect": {
-                        "damage": 1.5,
-                        "self_buff": {
-                            "dodge_rate": 15,
-                            "duration": 2
-                        }
-                    }
-                },
-                {
-                    "name": "风刃",
-                    "cost": 3,
-                    "description": "对目标造成 ATK×1.2 伤害，并降低目标3点速度，持续2回合",
-                    "effect": {
-                        "damage": 1.2,
-                        "debuff": {
-                            "speed": -3,
-                            "duration": 2
-                        }
-                    }
-                }
-            ]
-        },
-        {
             "id": 2,
             "name": "烈焰法师",
             "element": "火",

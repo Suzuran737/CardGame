@@ -1,0 +1,46 @@
+{
+  "name": "cardgame",
+  "version": "1.0.0",
+  "description": "这是一个基于Python Flask框架开发的卡牌游戏项目，包含卡牌管理、卡组构建和战斗系统等功能。",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "coverage:merged": "node -e \"process.platform === 'win32' ? require('child_process').execSync('powershell -ExecutionPolicy Bypass -File run_coverage.ps1', {stdio: 'inherit'}) : require('child_process').execSync('bash run_coverage.sh', {stdio: 'inherit'})\"",
+    "coverage:merged:bat": "run_coverage.bat",
+    "coverage:merged:en": "run_coverage_en.bat",
+    "coverage:step": "run_coverage_step.bat",
+    "coverage:jest": "jest --coverage --coverageDirectory=coverage/jest",
+    "coverage:python": "pytest --cov=app --cov-report=xml:coverage/python/coverage.xml tests/test_api tests/test_data_models tests/test_frontend tests/test_performance",
+    "test:battle": "jest tests/jest/battle-system.test.js",
+    "test:turn": "jest tests/jest/turn-system.test.js",
+    "test:element": "jest tests/jest/element-system.test.js",
+    "test:skill": "jest tests/jest/skill-effects.test.js",
+    "test:all": "jest tests/jest/*.test.js",
+    "test:update-snapshots": "jest --updateSnapshot",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Suzuran737/CardGame.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Suzuran737/CardGame/issues"
+  },
+  "homepage": "https://github.com/Suzuran737/CardGame#readme",
+  "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
+    "@testing-library/jest-dom": "^6.6.3",
+    "babel-jest": "^30.0.0-beta.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.0-beta.3"
+  }
+}

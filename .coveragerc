@@ -1,0 +1,57 @@
+[run]
+source = .
+omit =
+    # 测试文件
+    */tests/*
+    tests/*
+    */test_*
+    test_*.py
+    
+    # 虚拟环境
+    */venv/*
+    */env/*
+    */virtualenv/*
+    */.virtualenv/*
+    
+    # 第三方库
+    */site-packages/*
+    */dist-packages/*
+    */node_modules/*
+    
+    # 辅助文件
+    coverage_merger.py
+    setup.py
+    conftest.py
+    
+    # 临时文件和缓存
+    */__pycache__/*
+    *.pyc
+    */.pytest_cache/*
+    */.coverage
+    
+    # 其他不相关的文件
+    */migrations/*
+    */docs/*
+    */examples/*
+
+[report]
+# 排除特定代码行
+exclude_lines =
+    # 标准排除项
+    pragma: no cover
+    
+    # 不测试异常
+    except ImportError
+    raise NotImplementedError
+    
+    # 不测试调试代码
+    def __repr__
+    if __name__ == .__main__.:
+    if __name__ == "__main__":
+    
+    # 不测试防御性代码
+    pass
+    raise ImportError
+    
+[html]
+directory = coverage/python/html 

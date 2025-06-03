@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>卡牌游戏项目覆盖率报告</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        .summary {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .coverage-section {
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .progress-bar-container {
+            width: 200px;
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+        }
+        .good {
+            background-color: #2ecc71;
+        }
+        .warning {
+            background-color: #f39c12;
+        }
+        .danger {
+            background-color: #e74c3c;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        .chart {
+            width: 45%;
+            min-width: 400px;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>卡牌游戏项目覆盖率报告</h1>
+        
+        <div class="summary">
+            <h2>项目概览</h2>
+            <p>总文件数: 11</p>
+            <p>JavaScript文件: 10</p>
+            <p>Python文件: 1</p>
+        </div>
+        
+        <div class="coverage-section">
+            <h2>整体加权覆盖率</h2>
+            <table>
+                <tr>
+                    <th>指标</th>
+                    <th>覆盖率</th>
+                    <th>可视化</th>
+                </tr>
+                <tr>
+                    <td>行覆盖率</td>
+                    <td>81.41%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 81.41454545454546%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>分支覆盖率</td>
+                    <td>60.80%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar warning" style="width: 60.8%;"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="coverage-section">
+            <h2>JavaScript覆盖率</h2>
+            <table>
+                <tr>
+                    <th>指标</th>
+                    <th>覆盖率</th>
+                    <th>可视化</th>
+                </tr>
+                <tr>
+                    <td>行覆盖率</td>
+                    <td>81.97%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 81.97%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>语句覆盖率</td>
+                    <td>80.68%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 80.68%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>函数覆盖率</td>
+                    <td>84.86%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 84.86%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>分支覆盖率</td>
+                    <td>66.88%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar warning" style="width: 66.88%;"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="coverage-section">
+            <h2>Python覆盖率</h2>
+            <table>
+                <tr>
+                    <th>指标</th>
+                    <th>覆盖率</th>
+                    <th>可视化</th>
+                </tr>
+                <tr>
+                    <td>行覆盖率</td>
+                    <td>75.86%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar warning" style="width: 75.86%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>分支覆盖率</td>
+                    <td>0.00%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar danger" style="width: 0.0%;"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="coverage-section">
+            <h2>文件详情</h2>
+            <table>
+                <tr>
+                    <th>文件</th>
+                    <th>行覆盖率</th>
+                    <th>可视化</th>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\battle-actions-adapter.js</td>
+                    <td>91.17%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 91.17%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\battle-cards-adapter.js</td>
+                    <td>97.67%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 97.67%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\battle-main-adapter.js</td>
+                    <td>50.00%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar danger" style="width: 50%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\battle-state-adapter.js</td>
+                    <td>83.15%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 83.15%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\battle-system-adapter.js</td>
+                    <td>80.70%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 80.7%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\battle-ui-adapter.js</td>
+                    <td>92.66%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 92.66%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\card-effects-adapter.js</td>
+                    <td>95.09%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 95.09%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\element-system-adapter.js</td>
+                    <td>100.00%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 100%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\skill-effects-adapter.js</td>
+                    <td>75.36%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar warning" style="width: 75.36%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>D:\Github_Code\CardGame\static\js\battle\turn-system-adapter.js</td>
+                    <td>81.92%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar good" style="width: 81.92%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>app.py</td>
+                    <td>75.86%</td>
+                    <td>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar warning" style="width: 75.86%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+</body>
+</html>
